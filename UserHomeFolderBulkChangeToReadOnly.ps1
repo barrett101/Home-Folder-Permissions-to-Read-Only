@@ -35,9 +35,18 @@ foreach ($user in $userList)
             $Acl.SetAccessRule($Ar)
             Set-Acl -path $Path -AclObject $Acl
             $ar = $null
+            #Adds a flag here to indicate if it was run, if not then we just use it to write a log entry indicating nothing was found.
+			$flag = "1"
         }
         $path = $null
         $acl =$null
         $UsernameOnlyFromPath = $null
     }
+    #If the permissions were not adjusted, it will write a entry in the log indicating so.
+    If ($flag -eq $null)
+	{
+		"No changes made, $username doesn't have any permissions in $HomeFolderRoot." | out-file -FilePath "$logPath" -Append
+	}
+	$username = $null
+	$flag = $null
 }
